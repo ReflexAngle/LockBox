@@ -16,20 +16,31 @@ def help_me():
     print("CLOSE: to exit the program")
 
 
-def save_key():
-    pass
+def generate_key():
+    key = Fernet.generate_key()
+    with open("secret.key", "wb") as key_file:
+        key_file.write(key)
+
+
+def save_key(key, filename="secret.key"):
+    with open(filename, "wb") as key_file:
+        key_file.write(key)
 
 
 def load_key():
-    pass
+    return open("secret.key", "rb").read()
 
 
-def encrypt():
-    pass
+def encrypt(data, key):
+    cipher_suite = Fernet(key)
+    encrypted_data = cipher_suite.encrypt(data.encode())
+    return encrypted_data
 
 
-def decrypt():
-    pass
+def decrypt(encrypted_data, key):
+    cipher_suite = Fernet(key)
+    decrypted_data = cipher_suite.decrypt(encrypted_data)
+    return decrypted_data.decode()
 
 
 # Generates the password with the provided strength for it
@@ -50,7 +61,15 @@ def generate(password_strength):
 # the save function allows the user to save the password and have an associated username
 # and the website its for
 def save(username, associated_website, password_after, key):
-    pass
+    encrypted_password = encrypt(password_after, key)
+    credentials = {
+        'username': username,
+        'website': associated_website,
+        'password': encrypted_password.decode()  # Store as a string
+    }
+    # Save to a file, appending to the existing file
+    with open('passwords.txt', 'a') as f:
+        f.write(json.dumps(credentials) + "\n")
 
 
 def password_list():
@@ -64,15 +83,14 @@ def close():
 def main():
 
     password_strength = None
-    
-    '''key_file = "secret.key"
+
+    key_file = "secret.key"
 
     # Check if the key file exists, if not, generate a new key and save it.
     if not os.path.exists(key_file):
-        key = Fernet.generate_key()
-        save_key(key, key_file)
+        generate_key()
     else:
-        key = load_key(key_file)'''
+        key = load_key(key_file)
 
     print("Hello welcome to my password manager \ntype help for help")
 
@@ -128,8 +146,6 @@ def main():
                 return True
             elif yes_no == 'N' or yes_no == 'NO':
                 return False
-
-    key = load_key()
 
     # if the return is tru then the user is prompted to input the associated username and website
     # the values are then passed into the save function
