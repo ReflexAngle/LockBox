@@ -1,11 +1,19 @@
 import random
 import os
 import json
+import sys
 from cryptography.fernet import Fernet
 
 
-def help_me():
+def hello():
     pass
+
+
+def help_me():
+    print("HELP: for what you're looking at now")
+    print("NEW: to generate a new password")
+    print("LIST: to see list of you passwords")
+    print("CLOSE: to exit the program")
 
 
 def save_key():
@@ -30,7 +38,7 @@ def generate(password_strength):
     upper_case = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     lower_case = 'abcdefghijklmnopqrstuvwxyz'
     numbers = '1234567890'
-    special_characters = '!@#$%^&*()?/<>-'
+    special_characters = '!@#$%^&*()?/<>-{}[]|'
 
     all_chars = upper_case + lower_case + numbers + special_characters
 
@@ -45,11 +53,17 @@ def save(username, associated_website, password_after, key):
     pass
 
 
-def load_password_list():
+def password_list():
     pass
 
 
+def close():
+    sys.exit()
+
+
 def main():
+
+    password_strength = None
     
     '''key_file = "secret.key"
 
@@ -60,8 +74,25 @@ def main():
     else:
         key = load_key(key_file)'''
 
-    print("Hello")
-    doing = input()
+    print("Hello welcome to my password manager \ntype help for help")
+
+    # allows the user to input what they intend to do
+    # if help a list of commands appears
+    # if list then shows password list
+    def choose_to():
+        while True:
+            doing = input()
+            doing = doing.upper()
+            if doing == 'HELP':
+                help_me()
+            elif doing == 'NEW':
+                return doing
+            elif doing == 'LIST':
+                return doing
+            elif doing == 'EXIT':
+                return doing
+            else:
+                print('input a valid command \ntype help if you dont know the commands')
 
     # checks to see in if the inputted value is
     # if it's not then it will call the function again for the user to correct
@@ -73,7 +104,14 @@ def main():
             except ValueError:
                 print("Please enter a valid integer.")
 
-    password_strength = valid_strength()
+    proceed = choose_to()
+    if proceed == "EXIT":
+        close()
+    elif proceed == "LIST":
+        password_list()
+    elif proceed == "NEW":
+        password_strength = valid_strength()
+
     password_after = generate(password_strength)
 
     # asks isf the user is pleased and to save it or not
@@ -101,6 +139,8 @@ def main():
         associated_website = input("website: ",)
         save(username, associated_website, password_after, key)
         print("Credentials saved successfully!")
+    else:
+        main()
 
 
 if __name__ == '__main__':
