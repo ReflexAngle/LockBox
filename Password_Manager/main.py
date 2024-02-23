@@ -61,6 +61,7 @@ def generate(password_strength):
 # the save function allows the user to save the password and have an associated username
 # and the website its for
 def save(username, associated_website, password_after, key):
+
     encrypted_password = encrypt(password_after, key)
     credentials = {
         'username': username,
@@ -72,7 +73,13 @@ def save(username, associated_website, password_after, key):
         f.write(json.dumps(credentials) + "\n")
 
 
+# supposed to print the list out for the user
 def password_list():
+    pass
+
+
+# when prompted the program will show all relevant accounts for the user
+def find_password():
     pass
 
 
@@ -132,7 +139,7 @@ def main():
 
     password_after = generate(password_strength)
 
-    # asks isf the user is pleased and to save it or not
+    # asks if the user is pleased and to save it or not
     # if it's a yes it calls the save function
     # makes sure the user inputted a valid input
     print("Is this acquitted? ", password_after)
@@ -146,6 +153,10 @@ def main():
                 return True
             elif yes_no == 'N' or yes_no == 'NO':
                 return False
+            elif yes_no == 'EXIT':  # can always back out
+                close()
+            elif yes_no == 'RESTART':
+                main()
 
     # if the return is tru then the user is prompted to input the associated username and website
     # the values are then passed into the save function
