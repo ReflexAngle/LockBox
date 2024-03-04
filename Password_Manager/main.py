@@ -27,8 +27,8 @@ def save_key(key, filename="secret.key"):
         key_file.write(key)
 
 
-def load_key():
-    return open("secret.key", "rb").read()
+def load_key(file_name="secret.key"):
+    return open(file_name, "rb").read()
 
 
 def encrypt(data, key):
