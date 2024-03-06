@@ -74,9 +74,27 @@ def save(username, associated_website, password_after, key):
 
 
 # supposed to print the list out for the user
-def password_list():
-    pass
+def password_list(key):
+    continue_on = None
 
+    try:
+        with open("passwords.txt", 'r') as f:
+            for line in f.readlines():
+                # each credential is a json string
+                credentials = json.loads(line)
+
+                decrypted_password = decrypt(credentials['password'].encode(), key)
+                print(f"Username: {credentials['username']}, Website: {credentials['website']}, Password: {decrypted_password}")
+
+    except FileNotFoundError:
+        print("Password file not found.")
+    except json.JSONDecodeError:
+        print("Error decoding JSON from file.")
+        
+    continue_on = ("type Y to continue: ")
+    continue_on = continue_on.upper()
+    if continue_on == 'Y':
+        main()
 
 # when prompted the program will show all relevant accounts for the user
 def find_password():
@@ -103,10 +121,7 @@ def main():
         generate_key()
     else:
         key = load_key(key_file)
-
-    if key is None:
-        print("Key could not be loaded or generated.")
-        return
+        
 
     print("Hello welcome to my password manager \ntype help for help")
 
@@ -119,9 +134,9 @@ def main():
             doing = doing.upper()
             if doing == 'HELP':
                 help_me()
-            elif doing == 'NEW':
-                return doing
             elif doing == 'LIST':
+                return doing
+            elif doing == 'NEW':
                 return doing
             elif doing == 'EXIT':
                 return doing
@@ -142,9 +157,10 @@ def main():
     if proceed == "EXIT":
         close()
     elif proceed == "LIST":
-        password_list()
+        password_list(key)
     elif proceed == "NEW":
         password_strength = valid_strength()
+        
 
 
     password_after = generate(password_strength)
@@ -188,6 +204,8 @@ def main():
         print("Credentials saved successfully!")
     else:
         main()
+
+    main()
 
 
 if __name__ == '__main__':
