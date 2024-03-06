@@ -83,6 +83,10 @@ def find_password():
     pass
 
 
+def enter_pass():
+    enter_password = input("Enter your password: ", )
+    return enter_pass
+
 def close():
     sys.exit()
 
@@ -92,6 +96,7 @@ def main():
     password_strength = None
     key = None
     key_file = "secret.key"
+    user_enter = None
 
     # Check if the key file exists, if not, generate a new key and save it.
     if not os.path.exists(key_file):
@@ -141,13 +146,14 @@ def main():
     elif proceed == "NEW":
         password_strength = valid_strength()
 
+
     password_after = generate(password_strength)
 
     # asks if the user is pleased and to save it or not
     # if it's a yes it calls the save function
     # makes sure the user inputted a valid input
     print("Is this acquitted? ", password_after)
-    print('Y/N')
+    print('Y/N/E')
 
     def yes_or_no():
         while True:
@@ -157,6 +163,11 @@ def main():
                 return True
             elif yes_no == 'N' or yes_no == 'NO':
                 return False
+            elif yes_no == 'E' or yes_no == 'ENTER':
+                enter_pass()  # allows the user to enter a password they want to save
+                yes_no == 'enter'
+                user_enter = enter_pass
+                return yes_no
             elif yes_no == 'EXIT':  # can always back out
                 close()
             elif yes_no == 'RESTART':
@@ -169,6 +180,11 @@ def main():
         username = input("User name: ",)
         associated_website = input("website: ",)
         save(username, associated_website, password_after, key)
+        print("Credentials saved successfully!")
+    elif your_answer == 'enter':
+        username = input("User name: ",)
+        associated_website = input("website: ",)
+        save(username, associated_website, user_enter, key)
         print("Credentials saved successfully!")
     else:
         main()
