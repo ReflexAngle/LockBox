@@ -11,6 +11,6 @@ LockBox is a secure and user-friendly password manager designed to keep your dig
 
 ## Installation
 
-Before installing LockBox, ensure you have Python 3.6+ and `pip` installed on your system.
+Before installing LockBox, ensure you have Python 3.11+ and `pip` installed on your system.
 
    
