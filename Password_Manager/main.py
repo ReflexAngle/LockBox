@@ -90,7 +90,7 @@ def close():
 def main():
 
     password_strength = None
-
+    key = None
     key_file = "secret.key"
 
     # Check if the key file exists, if not, generate a new key and save it.
@@ -98,6 +98,10 @@ def main():
         generate_key()
     else:
         key = load_key(key_file)
+
+    if key is None:
+        print("Key could not be loaded or generated.")
+        return
 
     print("Hello welcome to my password manager \ntype help for help")
 
