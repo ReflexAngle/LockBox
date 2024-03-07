@@ -49,7 +49,7 @@ def generate(password_strength):
     upper_case = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     lower_case = 'abcdefghijklmnopqrstuvwxyz'
     numbers = '1234567890'
-    special_characters = '!@#$%^&*()?/<>-{}[]|'
+    special_characters = '!@#$%^&*()?/<>-}{[]|'
 
     all_chars = upper_case + lower_case + numbers + special_characters
 
@@ -119,6 +119,7 @@ def main():
     # Check if the key file exists, if not, generate a new key and save it.
     if not os.path.exists(key_file):
         generate_key()
+        key = load_key(key_file)
     else:
         key = load_key(key_file)
         
