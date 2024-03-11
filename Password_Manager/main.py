@@ -3,6 +3,7 @@ import json
 from cryptography.fernet import Fernet
 import other_things
 import generate_password
+import find
 
 
 def generate_key():
@@ -47,29 +48,6 @@ def save(username, associated_website, password_after, key):
         f.write(json.dumps(credentials) + "\n")
 
 
-# supposed to print the list out for the user
-def password_list(key):
-    continue_on = None
-
-    try:
-        with open("passwords.txt", 'r') as f:
-            for line in f.readlines():
-                # each credential is a json string
-                credentials = json.loads(line)
-
-                decrypted_password = decrypt(credentials['password'].encode(), key)
-                print(f"Username: {credentials['username']}, Website: {credentials['website']}, Password: {decrypted_password}")
-
-    except FileNotFoundError:
-        print("Password file not found.")
-    except json.JSONDecodeError:
-        print("Error decoding JSON from file.")
-        
-    continue_on = ("type Y to continue: ")
-    continue_on = continue_on.upper()
-    if continue_on == 'Y':
-        main()
-
 # when prompted the program will show all relevant accounts for the user
 def find_password():
     pass
@@ -81,6 +59,7 @@ def main():
     print(hello)
 
     password_strength = None
+    password_after = None
     key = None
     key_file = "secret.key"
     user_enter = None
@@ -110,6 +89,8 @@ def main():
                 return doing
             elif doing == 'EXIT':
                 return doing
+            elif doing == 'ENTER':
+                return doing
             else:
                 print('input a valid command \ntype help if you dont know the commands')
 
@@ -127,19 +108,20 @@ def main():
     if proceed == "EXIT":
         other_things.close()
     elif proceed == "LIST":
-        password_list(key)
+        '''password_list(key)'''
+        find.password_list(key)
     elif proceed == "NEW":
         password_strength = valid_strength()
-        
-
-
-    password_after = generate_password.generate(password_strength)
+        password_after = generate_password.generate(password_strength)
+    elif proceed == "ENTER":
+        password_after = generate_password.enter_password()
+         
 
     # asks if the user is pleased and to save it or not
     # if it's a yes it calls the save function
     # makes sure the user inputted a valid input
     print("Is this acquitted? ", password_after)
-    print('Y/N/E')
+    print('Y/N/ENTER')
 
     def yes_or_no():
         while True:
