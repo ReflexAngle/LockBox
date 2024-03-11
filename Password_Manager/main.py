@@ -3,17 +3,7 @@ import os
 import json
 import sys
 from cryptography.fernet import Fernet
-
-
-def hello():
-    pass
-
-
-def help_me():
-    print("HELP: for what you're looking at now")
-    print("NEW: to generate a new password")
-    print("LIST: to see list of you passwords")
-    print("CLOSE: to exit the program")
+import other_things
 
 
 def generate_key():
@@ -111,6 +101,9 @@ def close():
 
 def main():
 
+    hello = other_things.banner()
+    print(hello)
+
     password_strength = None
     key = None
     key_file = "secret.key"
@@ -134,7 +127,7 @@ def main():
             doing = input()
             doing = doing.upper()
             if doing == 'HELP':
-                help_me()
+                other_things.help_me()
             elif doing == 'LIST':
                 return doing
             elif doing == 'NEW':
