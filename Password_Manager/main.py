@@ -1,9 +1,9 @@
-import random
 import os
 import json
 import sys
 from cryptography.fernet import Fernet
 import other_things
+import generate_password
 
 
 def generate_key():
@@ -31,21 +31,6 @@ def decrypt(encrypted_data, key):
     cipher_suite = Fernet(key)
     decrypted_data = cipher_suite.decrypt(encrypted_data)
     return decrypted_data.decode()
-
-
-# Generates the password with the provided strength for it
-def generate(password_strength):
-
-    upper_case = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    lower_case = 'abcdefghijklmnopqrstuvwxyz'
-    numbers = '1234567890'
-    special_characters = '!@#$%^&*()?/<>-}{[]|'
-
-    all_chars = upper_case + lower_case + numbers + special_characters
-
-    # Generate a password using a random sample of the characters
-    password = ''.join(random.choice(all_chars) for _ in range(password_strength))
-    return password
 
 
 # the save function allows the user to save the password and have an associated username
@@ -157,7 +142,7 @@ def main():
         
 
 
-    password_after = generate(password_strength)
+    password_after = generate_password.generate(password_strength)
 
     # asks if the user is pleased and to save it or not
     # if it's a yes it calls the save function
