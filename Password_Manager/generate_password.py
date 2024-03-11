@@ -1,5 +1,6 @@
 import random
 
+# generates a password based on the streanth that the user inputed
 def generate(password_strength):
 
     upper_case = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -12,3 +13,8 @@ def generate(password_strength):
     # Generate a password using a random sample of the characters
     password = ''.join(random.choice(all_chars) for _ in range(password_strength))
     return password
+
+
+def enter_password():
+    enter_password = input("Enter your password: ", )
+    return enter_password

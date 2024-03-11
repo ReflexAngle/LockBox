@@ -1,6 +1,5 @@
 import os
 import json
-import sys
 from cryptography.fernet import Fernet
 import other_things
 import generate_password
@@ -76,14 +75,6 @@ def find_password():
     pass
 
 
-def enter_pass():
-    enter_password = input("Enter your password: ", )
-    return enter_pass
-
-def close():
-    sys.exit()
-
-
 def main():
 
     hello = other_things.banner()
@@ -134,7 +125,7 @@ def main():
 
     proceed = choose_to()
     if proceed == "EXIT":
-        close()
+        other_things.close()
     elif proceed == "LIST":
         password_list(key)
     elif proceed == "NEW":
@@ -159,12 +150,12 @@ def main():
             elif yes_no == 'N' or yes_no == 'NO':
                 return False
             elif yes_no == 'E' or yes_no == 'ENTER':
-                enter_pass()  # allows the user to enter a password they want to save
+                '''generate_password.enter_password()'''  # allows the user to enter a password they want to save
                 yes_no == 'enter'
-                user_enter = enter_pass
+                user_enter = generate_password.enter_password()
                 return yes_no
             elif yes_no == 'EXIT':  # can always back out
-                close()
+                other_things.close()
             elif yes_no == 'RESTART':
                 main()
 
