@@ -19,4 +19,11 @@ def help_me():
 
 def close():
     sys.exit()
-    
+
+
+# this goes in the find.py file to promt the user for cammands they can do
+def find_intruct():
+    print("your username or website for a search")
+    print("US username to search via username")
+    print("WS website to search via the website")
+    print("Y or YES to leave")

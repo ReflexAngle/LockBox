@@ -1,4 +1,4 @@
-import random
+import secrets
 
 # generates a password based on the streanth that the user inputed
 def generate(password_strength):
@@ -11,7 +11,7 @@ def generate(password_strength):
     all_chars = upper_case + lower_case + numbers + special_characters
 
     # Generate a password using a random sample of the characters
-    password = ''.join(random.choice(all_chars) for _ in range(password_strength))
+    password = ''.join(secrets.choice(all_chars) for _ in range(password_strength))
     return password
 
 

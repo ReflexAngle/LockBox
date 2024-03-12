@@ -98,9 +98,13 @@ def main():
     # if it's not then it will call the function again for the user to correct
     def valid_strength():
         while True:
-            password_strength = input('Length: ')
+            password_strength = input('Length: ', )
             try:
-                return int(password_strength)
+                password_strength = int(password_strength)
+                if password_strength < 16:  # checks password strength if they're greater than 16
+                    print("seriously you should at least make your password 16 characters")
+                else:  # if it is greater than 16 then it returns
+                    return password_strength 
             except ValueError:
                 print("Please enter a valid integer.")
 
@@ -131,11 +135,9 @@ def main():
                 return True
             elif yes_no == 'N' or yes_no == 'NO':
                 return False
-            elif yes_no == 'E' or yes_no == 'ENTER':
-                '''generate_password.enter_password()'''  # allows the user to enter a password they want to save
-                yes_no == 'enter'
+            elif yes_no == 'E' or yes_no == 'ENTER':  # allows the user to enter a password after the fact if the want to
                 user_enter = generate_password.enter_password()
-                return yes_no
+                return user_enter
             elif yes_no == 'EXIT':  # can always back out
                 other_things.close()
             elif yes_no == 'RESTART':
