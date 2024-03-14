@@ -31,8 +31,7 @@ def search(arr, inputed_name, key=lambda x: x):
         elif mid_val > target:
             low = mid + 1
     # If not found, let the user know and return to exit the function.
-    print("Entry not found.")
-    return 
+    search_web()
 
 
 
