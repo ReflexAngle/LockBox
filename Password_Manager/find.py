@@ -13,24 +13,24 @@ def sorting(arr, key=lambda x: x):
         pivot_right = [x for x in arr[1:] if key(x) > key(pivot)]
         return sorting(pivot_left, key) + [pivot] + sorting(pivot_right, key)
 
-
+# do a binary search to find the user name
 def search(arr, inputed_name, key=lambda x: x):
     target = inputed_name[2:]
     
     low = 0
     high = len(arr) - 1
     while low <= high:
-        mid = (high + low) // 2
+        mid = (low + high) // 2 
         mid_val = key(arr[mid])
         if mid_val == target:
             # If found, print the result and return to exit the function.
             print(f"Found: Username: {arr[mid]['username']}, Website: {arr[mid]['website']}, Password: {arr[mid]['password']}")
-            return  # Exit the function after finding the target
+            return  
         elif mid_val < target:
-            high = mid - 1
-        elif mid_val > target:
-            low = mid + 1
-    # If not found, let the user know and return to exit the function.
+            low = mid + 1 
+        else:
+            high = mid - 1  
+    
     search_web()
 
 
