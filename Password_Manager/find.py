@@ -14,12 +14,31 @@ def sorting(arr, key=lambda x: x):
         return sorting(pivot_left, key) + [pivot] + sorting(pivot_right, key)
 
 
-def search(arr):
-    pass
+def search(arr, inputed_name, key=lambda x: x):
+    target = inputed_name[2:]
+    
+    low = 0
+    high = len(arr) - 1
+    while low <= high:
+        mid = (high + low) // 2
+        mid_val = key(arr[mid])
+        if mid_val == target:
+            # If found, print the result and return to exit the function.
+            print(f"Found: Username: {arr[mid]['username']}, Website: {arr[mid]['website']}, Password: {arr[mid]['password']}")
+            return  # Exit the function after finding the target
+        elif mid_val < target:
+            high = mid - 1
+        elif mid_val > target:
+            low = mid + 1
+        # Removed the unnecessary 'else' block
+    # If not found, let the user know and return to exit the function.
+    print("Entry not found.")
+    return 
+
 
 
 def search_web():
-    pass
+    print("Hello World")
 
 # prints out a list of you password on the terminal
 def password_list(key):
@@ -55,15 +74,20 @@ def password_list(key):
         print("Error decoding JSON from file.")
 
     # this pulls from the other_things.py file to show further instructions
-    print(other_things.find_intruct())
+    other_things.find_intruct()
+    
+    def user_choice():
+        substring = "S "
+        substring2 = "s "
+        while True:
+            continue_on = input()
+            if continue_on.upper() == 'Y':
+                main.main()
+            elif substring in continue_on or substring2 in continue_on:
+                search(after_password_sorted, continue_on, key=lambda x: x['username'])
+            elif continue_on.upper() == "EXIT":
+                other_things.close()
+            else:
+                print("Enter a valid input")
 
-    continue_on = input()
-    continue_on = continue_on.upper()
-    if continue_on == 'Y':
-        main.main()
-    elif continue_on == 'S':
-        search(after_password_sorted)
-    elif continue_on == "EXIT":
-        other_things.close()
-    else:
-        print("Enter a valid input")
+    user_choice()

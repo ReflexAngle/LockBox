@@ -84,7 +84,7 @@ def main():
             if doing == 'HELP':
                 other_things.help_me()
             elif doing == 'LIST':
-                return doing
+                find.password_list(key)
             elif doing == 'NEW':
                 return doing
             elif doing == 'EXIT':
@@ -111,9 +111,6 @@ def main():
     proceed = choose_to()
     if proceed == "EXIT":
         other_things.close()
-    elif proceed == "LIST":
-        '''password_list(key)'''
-        find.password_list(key)
     elif proceed == "NEW":
         password_strength = valid_strength()
         password_after = generate_password.generate(password_strength)
