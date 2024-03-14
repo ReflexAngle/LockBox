@@ -30,13 +30,19 @@ def search(arr, inputed_name, key=lambda x: x):
             low = mid + 1 
         else:
             high = mid - 1  
-    
-    search_web()
+
+    search_web(arr, target, key = lambda x: x["website"])
 
 
+# if a username doesnt exist then try searching for a websiteassociated
+def search_web(arr, target, key = lambda x: x):
+    for entry in arr:
+        if key(entry) == target:
+            print(f"Found: Username: {entry['username']}, Website: {entry['website']}, Password: {entry['password']}")
+            return entry  
+    print("Website not found.")
+    return None
 
-def search_web():
-    print("Hello World")
 
 # prints out a list of you password on the terminal
 def password_list(key):
