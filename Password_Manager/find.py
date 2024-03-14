@@ -30,7 +30,6 @@ def search(arr, inputed_name, key=lambda x: x):
             high = mid - 1
         elif mid_val > target:
             low = mid + 1
-        # Removed the unnecessary 'else' block
     # If not found, let the user know and return to exit the function.
     print("Entry not found.")
     return 
