@@ -48,10 +48,6 @@ def save(username, associated_website, password_after, key):
         f.write(json.dumps(credentials) + "\n")
 
 
-# when prompted the program will show all relevant accounts for the user
-def find_password():
-    pass
-
 
 def main():
 

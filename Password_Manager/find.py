@@ -13,35 +13,45 @@ def sorting(arr, key=lambda x: x):
         pivot_right = [x for x in arr[1:] if key(x) > key(pivot)]
         return sorting(pivot_left, key) + [pivot] + sorting(pivot_right, key)
 
-# do a binary search to find the user name
-def search(arr, inputed_name, key=lambda x: x):
-    target = inputed_name[2:]
-    
-    low = 0
-    high = len(arr) - 1
-    while low <= high:
-        mid = (low + high) // 2 
-        mid_val = key(arr[mid])
-        if mid_val == target:
-            # If found, print the result and return to exit the function.
-            print(f"Found: Username: {arr[mid]['username']}, Website: {arr[mid]['website']}, Password: {arr[mid]['password']}")
-            return  
-        elif mid_val < target:
-            low = mid + 1 
+def build_hash_map(passwords):
+    username_map = {}
+    website_map = {}
+
+    for entry in passwords:
+        # Index by username
+        username = entry['username']
+        if username not in username_map:
+            username_map[username] = [entry]
         else:
-            high = mid - 1  
+            username_map[username].append(entry)
 
-    search_web(arr, target, key = lambda x: x["website"])
+        # Index by website
+        website = entry['website']
+        if website not in website_map:
+            website_map[website] = [entry]
+        else:
+            website_map[website].append(entry)
+
+    return username_map, website_map
+
+# changed from binary search to use a hash map to search
+def search_by_username(username_map, target):
+    if target in username_map:
+        for entry in username_map[target]:
+            print_entry(entry)
+    else:
+        print("Username not found.")
+
+def search_by_website(website_map, target):
+    if target in website_map:
+        for entry in website_map[target]:
+            print_entry(entry)
+    else:
+        print("Website not found.")
 
 
-# if a username doesnt exist then try searching for a websiteassociated
-def search_web(arr, target, key = lambda x: x):
-    for entry in arr:
-        if key(entry) == target:
-            print(f"Found: Username: {entry['username']}, Website: {entry['website']}, Password: {entry['password']}")
-            return entry  
-    print("Website not found.")
-    return None
+def print_entry(entry):
+    print(f"Found: Username: {entry['username']}, Website: {entry['website']}, Password: {entry['password']}")
 
 
 # prints out a list of you password on the terminal
@@ -51,7 +61,6 @@ def password_list(key):
     try:
         with open("passwords.txt", 'r') as f:
             passwords = []
-            after_password_sorted = []
             for line in f.readlines():
                 # each credential is a json string
                 credentials = json.loads(line)
@@ -68,7 +77,8 @@ def password_list(key):
             sorted_passwords = sorting(passwords, key=lambda x: x['username'])
             for entry in sorted_passwords:
                 print(f"Username: {entry['username']}, Website: {entry['website']}, Password: {entry['password']}")
-                after_password_sorted.append(entry)
+
+            username_map, website_map = build_hash_map(passwords)
 
            
 
@@ -79,19 +89,21 @@ def password_list(key):
 
     # this pulls from the other_things.py file to show further instructions
     other_things.find_intruct()
-    
-    def user_choice():
-        substring = "S "
-        substring2 = "s "
-        while True:
-            continue_on = input()
-            if continue_on.upper() == 'Y':
-                main.main()
-            elif substring in continue_on or substring2 in continue_on:
-                search(after_password_sorted, continue_on, key=lambda x: x['username'])
-            elif continue_on.upper() == "EXIT":
-                other_things.close()
-            else:
-                print("Enter a valid input")
 
-    user_choice()
+    user_choice(username_map, website_map)
+
+def user_choice(username_map, website_map):
+    while True:
+        continue_on = input("Enter command: ")
+        if continue_on.upper() == 'Y':
+            main.main()
+            break  # Assuming main.main() doesn't loop back here
+        elif continue_on.upper().startswith("S "):
+            target = continue_on[2:]
+            search_by_username(username_map, target)  # Corrected call
+            search_by_website(website_map, target)  # Corrected call
+        elif continue_on.upper() == "EXIT":
+            other_things.close()
+            break
+        else:
+            print("Enter a valid input")
