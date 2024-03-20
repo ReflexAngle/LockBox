@@ -96,6 +96,7 @@ def user_choice(username_map, website_map):
     while True:
         continue_on = input("Enter command: ")
         if continue_on.upper() == 'Y':
+            other_things.clear_screen()
             main.main()
             break  # Assuming main.main() doesn't loop back here
         elif continue_on.upper().startswith("S "):

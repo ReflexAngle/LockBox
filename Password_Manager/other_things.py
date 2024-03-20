@@ -1,5 +1,6 @@
 import pyfiglet
 import sys
+import os
 
 # I decide that the other file was getting to long and hard to read
 # so why not seperate diffrent things into their own files
@@ -26,3 +27,9 @@ def find_intruct():
     print("Type S and your username or website for a search")
     print("Y or YES to leave")
 
+
+def clear_screen():
+    if os.name == 'nt':  # for windows
+        os.system('cls')
+    else:  # for unix like
+        os.system('clear')

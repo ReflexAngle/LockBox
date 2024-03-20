@@ -4,6 +4,8 @@ from cryptography.fernet import Fernet
 import other_things
 import generate_password
 import find
+import master_password_mod
+
 
 
 def generate_key():
@@ -47,7 +49,7 @@ def save(username, associated_website, password_after, key):
     with open('passwords.txt', 'a') as f:
         f.write(json.dumps(credentials) + "\n")
 
-
+    
 
 def main():
 
@@ -58,7 +60,9 @@ def main():
     password_after = None
     key = None
     key_file = "secret.key"
+    master_password = "master_pass.txt"
     user_enter = None
+
 
     # Check if the key file exists, if not, generate a new key and save it.
     if not os.path.exists(key_file):
@@ -67,8 +71,25 @@ def main():
     else:
         key = load_key(key_file)
         
+    # checks if a master password exists
+    # id it does then you will be 
+    authenticated = False  # Initialize authentication status
 
-    print("Hello welcome to my password manager \ntype help for help")
+    if not os.path.exists(master_password):
+        master_password_mod.create_master_password(key)
+        authenticated = True
+    else:
+        authenticated = master_password_mod.enter_master(key)
+
+    while not authenticated:
+        print("Authentication failed. Please try again.")
+        authenticated = master_password_mod.enter_master(key)
+        # Optionally, include a break condition or a limit to attempts
+
+    if authenticated:
+        # Main application logic here
+        print("Hello welcome to my password manager \ntype help for help")
+        # Proceed with application
 
     # allows the user to input what they intend to do
     # if help a list of commands appears
@@ -78,8 +99,10 @@ def main():
             doing = input()
             doing = doing.upper()
             if doing == 'HELP':
+                other_things.clear_screen()
                 other_things.help_me()
             elif doing == 'LIST':
+                other_things.clear_screen()
                 find.password_list(key)
             elif doing == 'NEW':
                 return doing
@@ -135,6 +158,8 @@ def main():
                 other_things.close()
             elif yes_no == 'RESTART':
                 main()
+            else:
+                print("input a valid response")
 
     # if the return is tru then the user is prompted to input the associated username and website
     # the values are then passed into the save function
@@ -150,6 +175,7 @@ def main():
         save(username, associated_website, user_enter, key)
         print("Credentials saved successfully!")
     else:
+        other_things.clear_screen()
         main()
 
     main()
