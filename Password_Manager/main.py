@@ -6,7 +6,7 @@ import generate_password
 import find
 import master_password_mod
 
-
+is_authenticated = False
 
 def generate_key():
     key = Fernet.generate_key()
@@ -49,19 +49,33 @@ def save(username, associated_website, password_after, key):
     with open('passwords.txt', 'a') as f:
         f.write(json.dumps(credentials) + "\n")
 
-    
+
+def has_entered(key, master_password):
+    global is_authenticated
+
+    if not os.path.exists(master_password):
+        master_password_mod.create_master_password(key)
+    if is_authenticated == False:
+        is_authenticated = master_password_mod.enter_master(key)
+        print(is_authenticated)
+
+    while not is_authenticated:
+        print("Authentication failed. Please try again.")
+        is_authenticated = master_password_mod.enter_master(key)
+        # Optionally, include a break condition or a limit to attempts
 
 def main():
 
     hello = other_things.banner()
     print(hello)
 
+    global is_authenticated
     password_strength = None
     password_after = None
     key = None
     key_file = "secret.key"
     master_password = "master_pass.txt"
-    user_enter = None
+    user_enter = None 
 
 
     # Check if the key file exists, if not, generate a new key and save it.
@@ -73,23 +87,10 @@ def main():
         
     # checks if a master password exists
     # id it does then you will be 
-    authenticated = False  # Initialize authentication status
+    if not is_authenticated:  
+        has_entered(key, master_password)
 
-    if not os.path.exists(master_password):
-        master_password_mod.create_master_password(key)
-        authenticated = True
-    else:
-        authenticated = master_password_mod.enter_master(key)
-
-    while not authenticated:
-        print("Authentication failed. Please try again.")
-        authenticated = master_password_mod.enter_master(key)
-        # Optionally, include a break condition or a limit to attempts
-
-    if authenticated:
-        # Main application logic here
-        print("Hello welcome to my password manager \ntype help for help")
-        # Proceed with application
+    print("Hello welcome to my password manager \ntype help for help")
 
     # allows the user to input what they intend to do
     # if help a list of commands appears
