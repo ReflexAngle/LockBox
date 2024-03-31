@@ -5,8 +5,7 @@ import other_things
 import generate_password
 import find
 import master_password_mod
-
-is_authenticated = False
+from app_state import AppState
 
 def generate_key():
     key = Fernet.generate_key()
@@ -50,26 +49,16 @@ def save(username, associated_website, password_after, key):
         f.write(json.dumps(credentials) + "\n")
 
 
-def has_entered(key, master_password):
+'''def has_entered(key, master_password):
     global is_authenticated
 
     if not os.path.exists(master_password):
         master_password_mod.create_master_password(key)
     if is_authenticated == False:
-        is_authenticated = master_password_mod.enter_master(key)
-        print(is_authenticated)
+        is_authenticated = master_password_mod.enter_master(key)'''
+        
 
-    while not is_authenticated:
-        print("Authentication failed. Please try again.")
-        is_authenticated = master_password_mod.enter_master(key)
-        # Optionally, include a break condition or a limit to attempts
-
-def main():
-
-    hello = other_things.banner()
-    print(hello)
-
-    global is_authenticated
+def main(app_state):
     password_strength = None
     password_after = None
     key = None
@@ -77,6 +66,7 @@ def main():
     master_password = "master_pass.txt"
     user_enter = None 
 
+    print(other_things.banner())
 
     # Check if the key file exists, if not, generate a new key and save it.
     if not os.path.exists(key_file):
@@ -87,15 +77,15 @@ def main():
         
     # checks if a master password exists
     # id it does then you will be 
-    if not is_authenticated:  
-        has_entered(key, master_password)
-
-    print("Hello welcome to my password manager \ntype help for help")
+    if not app_state.is_authenticated:
+        master_password_mod.authenticate_user(app_state, key)
+        
 
     # allows the user to input what they intend to do
     # if help a list of commands appears
     # if list then shows password list
     def choose_to():
+        
         while True:
             doing = input()
             doing = doing.upper()
@@ -104,7 +94,8 @@ def main():
                 other_things.help_me()
             elif doing == 'LIST':
                 other_things.clear_screen()
-                find.password_list(key)
+                app_state = AppState()
+                find.password_list(key, app_state)
             elif doing == 'NEW':
                 return doing
             elif doing == 'EXIT':
@@ -177,10 +168,11 @@ def main():
         print("Credentials saved successfully!")
     else:
         other_things.clear_screen()
-        main()
+        main(app_state)
 
-    main()
+    main(app_state)
 
 
 if __name__ == '__main__':
-    main()
+    app_state = AppState()
+    main(app_state)

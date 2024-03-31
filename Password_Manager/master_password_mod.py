@@ -1,5 +1,6 @@
 import json
 import main
+import other_things
 
 def save_master(master_pass, key):
     encrypted_password = main.encrypt(master_pass, key)
@@ -17,25 +18,27 @@ def create_master_password(key):
 
 
 # checks if the password you input is correct
-def comapre_enter(password, key):
-    has_enterd = False
+def authenticate_user(app_state, key):
+    password = input("Master Password: ")
+    if compare_enter(password, key):
+        app_state.authenticate()
+        other_things.clear_screen()
+        print(other_things.banner())
+    else:
+        print("Incorrect password. Try again.")
+
+def compare_enter(password, key):
     try:
         with open('master_pass.txt', 'r') as f:
-            line = f.readline()  # Read the first line from the file
-            credential = json.loads(line)  # Parse JSON data from the read line
+            line = f.readline()
+            credential = json.loads(line)
 
             decrypt_master = main.decrypt(credential['password'].encode(), key)
-
-            if decrypt_master == password:
-                has_enterd = True
-            elif decrypt_master != password:
-                print("incorrect try agian")
-                enter_master()
+            return decrypt_master == password
     except ValueError:
-        print("incorrect try agian")
-        enter_master()
+        print("Error during password comparison.")
+        return False
 
-    return has_enterd
 
 
 

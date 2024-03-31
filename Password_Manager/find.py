@@ -1,6 +1,7 @@
 import other_things
 import main
 import json
+from app_state import AppState
 
 # the sort is to make it eaiser to find what the user is looking for
 # and if the list is printed in order it also allows for the use of a binary search 
@@ -55,12 +56,14 @@ def print_entry(entry):
 
 
 # prints out a list of you password on the terminal
-def password_list(key):
+def password_list(key, app_state):
     continue_on = None
+    
 
     try:
         with open("passwords.txt", 'r') as f:
             passwords = []
+            current = 1
             for line in f.readlines():
                 # each credential is a json string
                 credentials = json.loads(line)
@@ -76,7 +79,8 @@ def password_list(key):
             # this is to make it eaiser to read when they print
             sorted_passwords = sorting(passwords, key=lambda x: x['username'])
             for entry in sorted_passwords:
-                print(f"Username: {entry['username']}, Website: {entry['website']}, Password: {entry['password']}")
+                print(current, f"Username: {entry['username']}, Website: {entry['website']}, Password: {entry['password']}")
+                current = current + 1
 
             username_map, website_map = build_hash_map(passwords)
 
@@ -90,14 +94,16 @@ def password_list(key):
     # this pulls from the other_things.py file to show further instructions
     other_things.find_intruct()
 
-    user_choice(username_map, website_map)
+    user_choice(username_map, website_map, app_state)
 
-def user_choice(username_map, website_map):
+def user_choice(username_map, website_map, app_state):
     while True:
         continue_on = input("Enter command: ")
         if continue_on.upper() == 'Y':
             other_things.clear_screen()
-            #main.main()
+            
+            #app_state = AppState()
+            #main.main(app_state)
             break  # Assuming main.main() doesn't loop back here
         elif continue_on.upper().startswith("S "):
             target = continue_on[2:]
