@@ -84,8 +84,6 @@ def password_list(key, app_state):
 
             username_map, website_map = build_hash_map(passwords)
 
-           
-
     except FileNotFoundError:
         print("Password file not found.")
     except json.JSONDecodeError:
@@ -97,6 +95,8 @@ def password_list(key, app_state):
     user_choice(username_map, website_map, app_state)
 
 def user_choice(username_map, website_map, app_state):
+    serch_or_remove = None
+
     while True:
         continue_on = input("Enter command: ")
         if continue_on.upper() == 'Y':
@@ -106,9 +106,15 @@ def user_choice(username_map, website_map, app_state):
             #main.main(app_state)
             break  # Assuming main.main() doesn't loop back here
         elif continue_on.upper().startswith("S "):
+            serch_or_remove == 1
+            print(serch_or_remove)
             target = continue_on[2:]
             search_by_username(username_map, target)  # Corrected call
             search_by_website(website_map, target)  # Corrected call
+        elif continue_on.upper()>startswith("R"):
+            serch_or_remove == 2
+            print(serch_or_remove)
+            
         elif continue_on.upper() == "EXIT":
             other_things.close()
             break

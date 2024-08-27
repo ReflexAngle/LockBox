@@ -49,13 +49,11 @@ def save(username, associated_website, password_after, key):
         f.write(json.dumps(credentials) + "\n")
 
 
-'''def has_entered(key, master_password):
-    global is_authenticated
+def has_entered(key, master_password):
 
     if not os.path.exists(master_password):
         master_password_mod.create_master_password(key)
-    if is_authenticated == False:
-        is_authenticated = master_password_mod.enter_master(key)'''
+    
         
 
 def main(app_state):
@@ -66,6 +64,7 @@ def main(app_state):
     master_password = "master_pass.txt"
     user_enter = None 
 
+
     print(other_things.banner())
 
     # Check if the key file exists, if not, generate a new key and save it.
@@ -74,7 +73,8 @@ def main(app_state):
         key = load_key(key_file)
     else:
         key = load_key(key_file)
-        
+    
+    has_entered(key, master_password)
     # checks if a master password exists
     # id it does then you will be 
     if not app_state.is_authenticated:
